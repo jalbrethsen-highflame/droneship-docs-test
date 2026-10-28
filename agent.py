@@ -21,7 +21,21 @@ else:
             "max_tokens": 20,
             "messages": [{"role": "user", "content": "Reply with the single word pong."}],
         }).encode(),
-        headers={"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
+        headers={
+            "x-api-key": key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+            # The gateway also needs the sandbox's own credential, which Droneship
+            # puts in ANTHROPIC_CUSTOM_HEADERS ("Name: value" lines).
+            **{
+                k.strip(): v.strip()
+                for k, v in (
+                    line.split(":", 1)
+                    for line in os.environ.get("ANTHROPIC_CUSTOM_HEADERS", "").splitlines()
+                    if ":" in line
+                )
+            },
+        },
     )
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
