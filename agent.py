@@ -3,9 +3,9 @@ import json
 import os
 import urllib.request
 
-import langgraph  # proves the boot-time install of requirements.txt worked
+import langgraph.graph  # proves the boot-time install of requirements.txt worked
 
-print("agent.py running; langgraph imported from", os.path.dirname(langgraph.__file__))
+print("agent.py running; langgraph imported from", os.path.dirname(langgraph.graph.__file__))
 names = sorted(k for k in os.environ if k.endswith(("_API_KEY", "_BASE_URL")))
 print("model env vars:", names)
 
